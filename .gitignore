@@ -1,0 +1,57 @@
+
+/src/main/resources/application.yml
+
+*.iml
+*.json
+
+.idea/*
+.idea/
+out/
+/out/
+debug/
+
+.idea_modules/
+
+*.class
+*.jar
+*.war
+*.ear
+*.tmp
+*.exe
+
+thumbs.db
+.DS_Store
+
+target/generated-sources/
+target/
+/.classpath
+/.project
+.settings/
+
+*.log
+*.png
+
+*.xcodeproj
+
+# gradle
+.gradle
+/build/
+
+gradlew
+gradle
+gradlew.bat
+
+settings.gradle
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
