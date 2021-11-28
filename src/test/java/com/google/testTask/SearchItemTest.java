@@ -63,11 +63,22 @@ public class SearchItemTest {
 
 	// mvideo.ru is in the results list
 	public void getNeededShopFromListResults(String shopName) {
-		WebElement element = driver.findElement(By.cssSelector("div:nth-child(3) div:nth-child(3) cite"));
-		String foundText = element.getText();
-		int t = foundText.indexOf(' ');
-		String foundShopName = foundText.substring(0, t);
-		Assert.assertEquals(shopName, foundShopName);
+		List<WebElement> list = driver.findElements(By.cssSelector("div:nth-child(3) div:nth-child(3) cite"));
+		int i = 0;
+		for (WebElement element : list) {
+			String foundText = element.getText();
+			int t = foundText.indexOf(' ');
+			String foundShopName = foundText.substring(0, t);
+			System.out.println("foundShopName: " + i + ":" + foundShopName);
+			i++;
+		}
+
+//		if (shopName == foundShopName) {
+//			System.out.println("Shop mvideo.ru IS in the results list");
+//			Assert.assertEquals(shopName, foundShopName);
+//		} else {
+//			System.out.println("Shop mvideo.ru ISN'T in the results list");
+//		}
 	}
 
 	public void type(By locator, String text) {
@@ -80,7 +91,7 @@ public class SearchItemTest {
 		driver.findElement(locator).click();
 	}
 
-	@AfterMethod (enabled = false)
+	@AfterMethod(enabled = false)
 	public void tearDown() {
 		driver.quit();
 	}
