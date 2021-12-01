@@ -28,6 +28,7 @@ public class SearchItemTest {
 	// check that mvideo.ru is in the results list
 
 	WebDriver driver;
+	List<WebElement> list;
 
 	@BeforeMethod
 	public void setUp() {
@@ -35,50 +36,42 @@ public class SearchItemTest {
 		driver = new ChromeDriver();
 		// expand browser to full screen
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		// go to www.google.com
 		driver.navigate().to("https://www.google.com/");
 	}
 
 	@Test
 	public void searchItemTest() {
-		Actions actions = new Actions(driver);
 		// type in the input field "купить кофемашину bork c804"
 		type(By.className("gLFyf"), "купить кофемашину bork c804");
 		// press Enter
+		Actions actions = new Actions(driver);
 		actions.sendKeys(Keys.ENTER).build().perform();
-		getQuantityResultsMoreTen();
-		getNeededShopFromListResults("https://www.mvideo.ru");
+		// results - list of links
+		this.list = driver.findElements(By.cssSelector("div:nth-child(3) div:nth-child(3) cite"));
+		getQuantityResults();
+		isNeededShopInList("mvideo.ru");
 	}
 
 	// number of results is GREATER than 10
-	public void getQuantityResultsMoreTen() {
-		List<WebElement> elements = driver.findElements(By.cssSelector("div:nth-child(3) div:nth-child(3) cite"));
-		if (elements.size() >= 10) {
-			System.out.println("Number of results is GREATER than 10");
-		} else {
-			System.out.println("Number of elements LOWER than 10");
-		}
+	public void getQuantityResults() {
+		WebElement element = driver.findElement(By.cssSelector("td:nth-child(3) > .fl"));
+//		System.out.println("element: " + element.getText());
+		// check next page (2) of results
+		Assert.assertEquals("2", element.getText());
 	}
 
-	// mvideo.ru is in the results list
-	public void getNeededShopFromListResults(String shopName) {
-		List<WebElement> list = driver.findElements(By.cssSelector("div:nth-child(3) div:nth-child(3) cite"));
-		int i = 0;
-		for (WebElement element : list) {
-			String foundText = element.getText();
-			int t = foundText.indexOf(' ');
-			String foundShopName = foundText.substring(0, t);
-			System.out.println("foundShopName: " + i + ":" + foundShopName);
-			i++;
+	public void isNeededShopInList(String shopName) {
+		for(WebElement element : this.list) {
+			if (element.getText().contains(shopName)) {
+				System.out.println("Shop mvideo.ru IS in the results list");
+				Assert.assertTrue(element.getText().contains(shopName));
+			} else {
+				System.out.println("Shop mvideo.ru ISN'T in the results list");
+				Assert.assertFalse(element.getText().contains(shopName));
+			}
 		}
-
-//		if (shopName == foundShopName) {
-//			System.out.println("Shop mvideo.ru IS in the results list");
-//			Assert.assertEquals(shopName, foundShopName);
-//		} else {
-//			System.out.println("Shop mvideo.ru ISN'T in the results list");
-//		}
 	}
 
 	public void type(By locator, String text) {
